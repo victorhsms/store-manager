@@ -17,7 +17,7 @@ router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const [rows] = await productsServices.getAll(id);
-    console.log(rows);
+    if (rows.length === 0) res.status(404).json({ message: 'Product not found' });
     res.status(200).json(rows[0]);
   } catch (err) {
     console.log(err);
