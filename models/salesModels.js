@@ -13,6 +13,19 @@ const getAll = () => connection.execute(`
   ORDER BY saleId;
 `);
 
+const getById = (id) => connection.execute(`
+  SELECT
+    sales.date AS date,
+    salesProducts.product_id AS productId,
+    salesProducts.quantity AS quantity
+  FROM
+    StoreManager.sales_products AS salesProducts  
+  INNER JOIN StoreManager.sales AS sales
+    ON salesProducts.sale_id = sales.id
+  WHERE salesProducts.sale_id = ?;
+`, [id]);
+
 module.exports = {
   getAll,
+  getById,
 };
