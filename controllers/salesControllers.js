@@ -1,5 +1,9 @@
 const express = require('express');
 const salesServices = require('../services/salesServices');
+const {
+  productIdValidation,
+  quantityValidation,
+} = require('../middlewares/index');
 
 const router = express.Router();
 
@@ -24,5 +28,21 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ message: 'Erro inesperado' });
 }
 });
+
+router.post(
+  '/',
+  productIdValidation,
+  quantityValidation,
+  (req, res) => {
+  try {
+    const { productId, quantity } = req.body;
+  
+    res.status(201).json({ productId, quantity });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'Erro inesperado' });
+  }
+},
+);
 
 module.exports = router;
