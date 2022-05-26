@@ -33,13 +33,15 @@ router.post(
   '/',
   nameValidation,
   quantityValidation,
-  (req, res) => {
+  async (req, res) => {
   try {
     const { name, quantity } = req.body;
-  
-    res.status(201).json({ name, quantity });
+    const result = await productsServices.postProduct(name, quantity);
+    if (!result) return res.status(409).json({ message: 'Product already exists' });
+    console.log(result);
+    res.status(201).json(result);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     res.status(500).json({ message: 'Erro inesperado' });
   }
 },
