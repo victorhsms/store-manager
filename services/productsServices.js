@@ -27,8 +27,19 @@ const putProduct = async (id, name, quantity) => {
   return { id: returnedId, name, quantity };
 };
 
+const deleteProduct = async (id) => {
+  // Vendo se possui um item com esse id na lista
+  const [allItems] = await productsModels.getAll();
+  const findItem = allItems.find((item) => Number(item.id) === Number(id));
+  if (!findItem) return true;
+
+  // Caso ja possua
+  await productsModels.deleteProduct(id);
+};
+
 module.exports = {
   getAll,
   postProduct,
   putProduct,
+  deleteProduct,
 };

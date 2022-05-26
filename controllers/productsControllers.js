@@ -4,6 +4,7 @@ const {
   nameValidation,
   quantityValidation,
 } = require('../middlewares/index');
+const messages = require('../mocks/messages');
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ router.get('/', async (req, res) => {
     res.status(200).json(rows);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: 'Erro inesperado' });
+    res.status(500).json({ message: messages[500] });
 }
 });
 
@@ -25,7 +26,7 @@ router.get('/:id', async (req, res) => {
     res.status(200).json(rows[0]);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: 'Erro inesperado' });
+    res.status(500).json({ message: messages[500] });
   }
 });
 
@@ -42,7 +43,7 @@ router.post(
     res.status(201).json(result);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: 'Erro inesperado' });
+    res.status(500).json({ message: messages[500] });
   }
 },
 );
@@ -61,7 +62,27 @@ router.put(
     res.status(200).json(result);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: 'Erro inesperado' });
+    res.status(500).json({ message: messages[500] });
+  }
+},
+);
+
+router.delete(
+  '/:id',
+  async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await productsServices.deleteProduct(id);
+    
+    if (result) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    return res.status(204).send();
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: messages[500] });
   }
 },
 );

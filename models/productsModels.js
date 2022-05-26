@@ -24,9 +24,17 @@ const putProduct = async (id, name, quantity) => {
   return result.insertId;
 };
 
+const deleteProduct = (id) => {
+  connection.execute(
+    'DELETE FROM StoreManager.products WHERE id=?;',
+    [id],
+  );
+};
+
 module.exports = {
   getAll,
   getById,
   postProduct,
   putProduct,
+  deleteProduct,
 };
