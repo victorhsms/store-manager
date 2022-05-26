@@ -6,7 +6,7 @@ const getAll = (id = null) => {
 };
 
 const postProduct = async (name, quantity) => {
-  // vendo se ja possui um item parecido na lista
+  // Vendo se ja possui um item parecido na lista
   const [allItems] = await productsModels.getAll();
   const findItem = allItems.find((item) => item.name === name);
   if (findItem) return undefined;
@@ -16,7 +16,19 @@ const postProduct = async (name, quantity) => {
   return { id, name, quantity };
 };
 
+const putProduct = async (id, name, quantity) => {
+  // Vendo se possui um item com esse id na lista
+  const [allItems] = await productsModels.getAll();
+  const findItem = allItems.find((item) => Number(item.id) === Number(id));
+  if (!findItem) return undefined;
+
+  // Caso ja possua
+  const returnedId = await productsModels.putProduct(id, name, quantity);
+  return { id: returnedId, name, quantity };
+};
+
 module.exports = {
   getAll,
   postProduct,
+  putProduct,
 };

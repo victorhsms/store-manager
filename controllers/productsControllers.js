@@ -36,12 +36,31 @@ router.post(
   async (req, res) => {
   try {
     const { name, quantity } = req.body;
+
     const result = await productsServices.postProduct(name, quantity);
     if (!result) return res.status(409).json({ message: 'Product already exists' });
-    console.log(result);
     res.status(201).json(result);
   } catch (err) {
-    // console.log(err);
+    console.log(err);
+    res.status(500).json({ message: 'Erro inesperado' });
+  }
+},
+);
+
+router.put(
+  '/:id',
+  nameValidation,
+  quantityValidation,
+  async (req, res) => {
+  try {
+    const { name, quantity } = req.body;
+    const { id } = req.params;
+
+    const result = await productsServices.putProduct(id, name, quantity);
+    if (!result) return res.status(404).json({ message: 'Product not found' });
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
     res.status(500).json({ message: 'Erro inesperado' });
   }
 },
