@@ -1,7 +1,6 @@
 const express = require('express');
 const salesServices = require('../services/salesServices');
 const {
-  productIdValidation,
   quantitySaleValidation,
 } = require('../middlewares/index');
 const messages = require('../mocks/messages');
@@ -32,13 +31,13 @@ router.get('/:id', async (req, res) => {
 
 router.post(
   '/',
-  productIdValidation,
   quantitySaleValidation,
-  (req, res) => {
+  async (req, res) => {
   try {
-    const { productId, quantity } = req.body;
+    const sales = req.body;
   
-    res.status(201).json({ productId, quantity });
+    const response = await salesServices.postSales(sales);
+    res.status(201).json(response);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: messages[500] });

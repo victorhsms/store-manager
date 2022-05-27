@@ -25,13 +25,27 @@ const getById = (id) => connection.execute(`
   WHERE salesProducts.sale_id = ?;
 `, [id]);
 
+const newSale = async () => {
+  const [result] = await connection.execute(`
+   INSERT INTO StoreManager.sales (date) VALUES (NOW());
+ `);
+
+  return result.insertId;
+};
+
+const postSale = (id, productId, quantity) => connection.execute(`
+  INSERT INTO StoreManager.sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?);
+`, [id, productId, quantity]);
+
 const putSale = (id, productId, quantity) => connection.execute(
     'UPDATE StoreManager.sales_products SET quantity=? WHERE product_id=? AND sale_id=?;',
     [quantity, productId, id],
-  );
+);
 
 module.exports = {
   getAll,
   getById,
+  newSale,
+  postSale,
   putSale,
 };
