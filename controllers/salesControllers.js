@@ -2,8 +2,9 @@ const express = require('express');
 const salesServices = require('../services/salesServices');
 const {
   productIdValidation,
-  quantityValidation,
+  quantitySaleValidation,
 } = require('../middlewares/index');
+const messages = require('../mocks/messages');
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ router.get('/', async (req, res) => {
     res.status(200).json(rows);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: 'Erro inesperado' });
+    res.status(500).json({ message: messages[500] });
 }
 });
 
@@ -25,14 +26,14 @@ router.get('/:id', async (req, res) => {
     res.status(200).json(rows);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: 'Erro inesperado' });
+    res.status(500).json({ message: messages[500] });
 }
 });
 
 router.post(
   '/',
   productIdValidation,
-  quantityValidation,
+  quantitySaleValidation,
   (req, res) => {
   try {
     const { productId, quantity } = req.body;
@@ -40,7 +41,24 @@ router.post(
     res.status(201).json({ productId, quantity });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: 'Erro inesperado' });
+    res.status(500).json({ message: messages[500] });
+  }
+},
+);
+
+router.put(
+  '/:id',
+  quantitySaleValidation,
+  async (req, res) => {
+  try {
+    const { productId, quantity } = req.body[0];
+    const { id } = req.params;
+
+    const result = await salesServices.putSale(id, productId, quantity);
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: messages[500] });
   }
 },
 );

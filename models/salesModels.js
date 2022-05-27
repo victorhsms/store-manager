@@ -25,7 +25,13 @@ const getById = (id) => connection.execute(`
   WHERE salesProducts.sale_id = ?;
 `, [id]);
 
+const putSale = (id, productId, quantity) => connection.execute(
+    'UPDATE StoreManager.sales_products SET quantity=? WHERE product_id=? AND sale_id=?;',
+    [quantity, productId, id],
+  );
+
 module.exports = {
   getAll,
   getById,
+  putSale,
 };
