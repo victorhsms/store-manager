@@ -3,5 +3,5 @@ module.exports = (request, response, next) => {
 
   if (!productId) return response.status(400).json({ message: '"productId" is required' });
 
-  return next();
+  next();
 };
