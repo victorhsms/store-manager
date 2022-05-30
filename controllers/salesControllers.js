@@ -1,24 +1,17 @@
-const express = require('express');
 const salesServices = require('../services/salesServices');
-const {
-  productIdSaleValidation,
-  quantitySaleValidation,
-} = require('../middlewares/index');
 const messages = require('../mocks/messages');
 
-const router = express.Router();
-
-router.get('/', async (req, res) => {
+const getAllSales = async (req, res) => {
   try {
     const [rows] = await salesServices.getAll();
     return res.status(200).json(rows);
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: messages[500] });
-}
-});
+  }
+};
 
-router.get('/:id', async (req, res) => {
+const getSale = async (req, res) => {
   try {
     const { id } = req.params;
     const [rows] = await salesServices.getAll(id);
@@ -27,14 +20,10 @@ router.get('/:id', async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: messages[500] });
-}
-});
+  }
+};
 
-router.post(
-  '/',
-  productIdSaleValidation,
-  quantitySaleValidation,
-  async (req, res) => {
+const postSale = async (req, res) => {
   try {
     const sales = req.body;
   
@@ -44,14 +33,9 @@ router.post(
     console.log(err);
     return res.status(500).json({ message: messages[500] });
   }
-},
-);
+};
 
-router.put(
-  '/:id',
-  productIdSaleValidation,
-  quantitySaleValidation,
-  async (req, res) => {
+const putSale = async (req, res) => {
   try {
     const { productId, quantity } = req.body[0];
     const { id } = req.params;
@@ -62,7 +46,11 @@ router.put(
     console.log(err);
     return res.status(500).json({ message: messages[500] });
   }
-},
-);
+};
 
-module.exports = router;
+module.exports = {
+  getSale,
+  getAllSales,
+  postSale,
+  putSale,
+};

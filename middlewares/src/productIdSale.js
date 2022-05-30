@@ -3,6 +3,7 @@ module.exports = (request, response, next) => {
 
   items.forEach((item) => {
     const { productId } = item;
+    console.log(productId);
     if (!productId) return response.status(400).json({ message: '"productId" is required' });
   });
 

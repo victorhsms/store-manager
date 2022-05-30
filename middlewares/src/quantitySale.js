@@ -3,8 +3,7 @@ module.exports = (request, response, next) => {
 
   items.forEach((item) => {
     const { quantity } = item;
-    console.log(quantity);
-    
+
     if (quantity === undefined) {
       return response.status(400).json({ message: '"quantity" is required' });
     }
