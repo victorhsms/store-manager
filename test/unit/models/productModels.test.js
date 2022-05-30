@@ -5,13 +5,13 @@ const productsModels = require("../../../models/productsModels");
 const productsResults = require("../../../mocks/productsResults");
 const connection = require("../../../db");
 
-describe("Product Model: Ao chamar todos com sucesso", async () => {
-  before(() => {
+describe("Product Model: Ao chamar todos com sucesso", () => {
+  before(async () => {
     sinon.stub(connection, "execute")
       .resolves(productsResults.getAll);
   });
 
-  after(() => {
+  after(async () => {
     connection.execute.restore();
   });
 
