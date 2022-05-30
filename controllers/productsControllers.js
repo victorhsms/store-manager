@@ -1,14 +1,7 @@
-const express = require('express');
 const productsServices = require('../services/productsServices');
-const {
-  nameValidation,
-  quantityValidation,
-} = require('../middlewares/index');
 const messages = require('../mocks/messages');
 
-const router = express.Router();
-
-router.get('/', async (req, res) => {
+const getAllProducts = async (req, res) => {
   try {
     const [rows] = await productsServices.getAll();
     return res.status(200).json(rows);
@@ -16,9 +9,9 @@ router.get('/', async (req, res) => {
     console.log(err);
     return res.status(500).json({ message: messages[500] });
 }
-});
+};
 
-router.get('/:id', async (req, res) => {
+const getProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const [rows] = await productsServices.getAll(id);
@@ -28,13 +21,9 @@ router.get('/:id', async (req, res) => {
     console.log(err);
     return res.status(500).json({ message: messages[500] });
   }
-});
+};
 
-router.post(
-  '/',
-  nameValidation,
-  quantityValidation,
-  async (req, res) => {
+const postProduct = async (req, res) => {
   try {
     const { name, quantity } = req.body;
 
@@ -45,14 +34,9 @@ router.post(
     console.log(err);
     return res.status(500).json({ message: messages[500] });
   }
-},
-);
+};
 
-router.put(
-  '/:id',
-  nameValidation,
-  quantityValidation,
-  async (req, res) => {
+const putProduct = async (req, res) => {
   try {
     const { name, quantity } = req.body;
     const { id } = req.params;
@@ -64,12 +48,9 @@ router.put(
     console.log(err);
     return res.status(500).json({ message: messages[500] });
   }
-},
-);
+};
 
-router.delete(
-  '/:id',
-  async (req, res) => {
+const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -84,7 +65,12 @@ router.delete(
     console.log(err);
     return res.status(500).json({ message: messages[500] });
   }
-},
-);
+};
 
-module.exports = router;
+module.exports = {
+  getAllProducts,
+  getProduct,
+  postProduct,
+  putProduct,
+  deleteProduct,
+};

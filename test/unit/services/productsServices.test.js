@@ -1,5 +1,6 @@
 const sinon = require("sinon");
 const { expect } = require("chai");
+const { before, after } = require("mocha");
 
 const productsServices = require("../../../services/productsServices");
 const productsModels = require("../../../models/productsModels");
@@ -58,6 +59,34 @@ describe("teste do service /product", async () => {
       expect(response[0][0]).to.be.property('id');
       expect(response[0][0]).to.be.property('name');
       expect(response[0][0]).to.be.property('quantity');
+    });
+  });
+
+  describe("Ao postar um novo produto", async () => {
+    before(() => {
+      sinon.stub(productsModels, "getAll")
+        .resolves(productsResults.getProduct);
+
+      sinon.stub(productsModels, "postProduct")
+        .resolves(4);
+    });
+  
+    after(() => {
+      productsModels.getAll.restore();
+      productsModels.postProduct.restore();
+    });
+  
+    it('recebe um array', async () => {
+      const response = await productsServices.postProduct('produto', 10)
+  
+      expect(response).to.be.a('object');
+    });
+    it('A primeira casa do array tem o retorno das vendas', async () => {
+      const response = await productsServices.postProduct('produto', 10)
+
+      expect(response).to.be.property('id');
+      expect(response).to.be.property('name');
+      expect(response).to.be.property('quantity');
     });
   });
 });
